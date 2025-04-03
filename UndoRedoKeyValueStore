@@ -1,0 +1,151 @@
+/*
+Build an UndoRedo key-value store with the following functionalities:
+
+
+get(key): Returns the value associated with the key.
+
+
+set(key, value): Assigns the value to the key. If the key does not exist, create it.
+
+
+delete(key): Remove the key from the object.
+
+
+undo(): Undoes the last operation on the object.
+
+
+redo(): Redoes the last undone operation. redo is only possible after an undo.
+
+
+*/
+
+
+
+import java.util.*;
+
+// Enum to define operation types
+enum Type {
+    SET, DELETE
+}
+
+// Operation class to track changes
+class Operation {
+    String key, oldValue, newValue;
+    Type type;
+
+    public Operation(Type type, String key, String oldValue, String newValue) {
+        this.type = type;
+        this.key = key;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
+    }
+}
+
+// Main key-value store with undo/redo
+class KeyValueStore {
+    Map<String, String> store = new HashMap<>();
+    Stack<Operation> undoStack = new Stack<>();
+    Stack<Operation> redoStack = new Stack<>();
+
+    public String get(String key) {
+        if (store.containsKey(key)) {
+            return store.get(key);
+        }
+        throw new IllegalArgumentException("Key does not exist: " + key);
+    }
+
+    public void set(String key, String value) {
+        String oldValue = store.get(key);
+        store.put(key, value);
+        undoStack.push(new Operation(Type.SET, key, oldValue, value));
+        redoStack.clear(); // Important: clear redo history after new change
+    }
+
+    public void delete(String key) {
+        if (store.containsKey(key)) {
+            String oldValue = store.remove(key);
+            undoStack.push(new Operation(Type.DELETE, key, oldValue, null));
+            redoStack.clear(); // Clear redo on new change
+        }
+    }
+
+    public void undo() {
+        if (undoStack.isEmpty()) {
+            System.out.println("Nothing to undo.");
+            return;
+        }
+
+        Operation op = undoStack.pop();
+
+        if (op.type == Type.DELETE) {
+            store.put(op.key, op.oldValue);
+        } else if (op.type == Type.SET) {
+            if (op.oldValue == null) {
+                store.remove(op.key);
+            } else {
+                store.put(op.key, op.oldValue);
+            }
+        }
+
+        redoStack.push(op);
+    }
+
+    public void redo() {
+        if (redoStack.isEmpty()) {
+            System.out.println("Nothing to redo.");
+            return;
+        }
+
+        Operation op = redoStack.pop();
+
+        if (op.type == Type.SET) {
+            store.put(op.key, op.newValue);
+        } else if (op.type == Type.DELETE) {
+            store.remove(op.key);
+        }
+
+        undoStack.push(op);
+    }
+
+    // Optional: utility method to print current state
+    public void printStore() {
+        System.out.println("Current store: " + store);
+    }
+}
+
+// Test in main method
+class Solution {
+    public static void main(String[] args) {
+        KeyValueStore store = new KeyValueStore();
+
+        System.out.println("Set a = 1");
+        store.set("a", "1");
+        store.printStore();
+
+        System.out.println("Delete a");
+        store.delete("a");
+        store.printStore();
+
+        System.out.println("Undo");
+        store.undo();
+        store.printStore();
+
+        System.out.println("Set a = 2");
+        store.set("a", "2");
+        store.printStore();
+
+        System.out.println("Undo");
+        store.undo();
+        store.printStore();
+
+        System.out.println("Redo");
+        store.redo();
+        store.printStore();
+
+        System.out.println("Undo");
+        store.undo();
+        store.printStore();
+
+        System.out.println("Try to get value of a: " + store.get("a"));
+    }
+}
