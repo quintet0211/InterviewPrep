@@ -1,0 +1,49 @@
+print('Hello')
+
+'''
+Let's say we're working at a company that provides a streaming music service. This service has a database of 30M+ unique songs.
+
+We would like to build an API that allows users to create and manage song playlists. A song playlist consists of a name and a list of zero or more songs in user-defined order. A particular song may appear within the same playlist more than once.
+
+For simplicity, we assume there is only one user of this service. Also, there is no need to consider how one would actually play the music in these playlists.
+
+We do expect the design to include some consideration of multiple connected clients, eg. a web client + a mobile app both open simultaneously. Some thought should be given to how to broadcast updates to other connected clients, though this should not be the focus of the question at this point in time.
+
+
+
+
+
+Functional Requirement
+- user create playlist (contains name and a list of songs)
+- user can manage playlist (add/remove/changeOrder/insert
+
+1. Create playlist
+PUT /playlist/create   
+- Request: name, [songsId]
+- Response: playlistId
+
+1.1 Get playlist
+GET /playlist/
+- Request: playListId, (optional:pageSize=xxx)
+- Response: pageSize, [song, id] 
+
+1 song1
+2  song3
+3 song2
+4  song4
+
+2. Add songs
+PUT /playlist/insert
+- Request: playlistId,[{songId1, 1}, {songId3, 3}] 
+
+Song
+-songId
+-Songname
+
+Playlist
+- playlistId (PK)
+- songId 
+- order (Long) 1,2,3...1m
+
+
+'''
