@@ -5,36 +5,31 @@ He called leaf nodes "live nodes" and wanted the maximum sum of a path that star
 */
 
 class Solution {
-    private int maxSum = Integer.MIN_VALUE;
+    private int maxLeafToLeafSum = Integer.MIN_VALUE;
 
     public int maxPathSum(TreeNode root) {
-        // Handle edge case: if no valid leaf-to-leaf path exists, return Integer.MIN_VALUE
         helper(root);
-        return maxSum;
+        return maxLeafToLeafSum;
     }
 
     private int helper(TreeNode node) {
-        if (node == null) return Integer.MIN_VALUE;
+        if (node == null) return 0;
 
-        // Leaf node: return its value
-        if (node.left == null && node.right == null) {
-            return node.val;
-        }
-
-        // Recursively get max path sum from left and right subtrees
+        // Recursively compute left and right path sums
         int left = helper(node.left);
         int right = helper(node.right);
 
-        // If both children exist, we can form a leaf-to-leaf path through this node
+        // If both children exist, this node can connect two leaves
         if (node.left != null && node.right != null) {
-            int currentPathSum = left + right + node.val;
-            maxSum = Math.max(maxSum, currentPathSum);
-            // Return max single-side path to parent
+            int leafToLeafSum = left + right + node.val;
+            maxLeafToLeafSum = Math.max(maxLeafToLeafSum, leafToLeafSum);
+
+            // Return the best path up to parent using one side only
             return Math.max(left, right) + node.val;
         }
 
-        // Only one child exists: return path through it
-        return (node.left == null ? right : left) + node.val;
+        // If only one child exists, return path through that child
+        return (node.left != null ? left : right) + node.val;
     }
 }
 
