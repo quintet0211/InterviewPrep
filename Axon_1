@@ -1,0 +1,74 @@
+# Imagine you’re working on an Axon Evidence team to implement a feature that compares two groups of evidence (or “cases”).
+
+# * A case is an ordered sequence of zero or more pieces of evidence.
+# * A piece of evidence is represented by its id.
+
+
+# Implement a function that will return the similarity score of two cases. Similarity score is defined by the 
+# smallest number of operations it takes for two cases to be equal. Two cases are equal if they have the same evidence files, 
+# the same order, and the same size.
+
+# An operation includes:
+
+# * Inserting one evidence id anywhere in the case.
+# * Removing one evidence id from the case.
+# * Replacing one evidence id in the case with a different value.
+
+#         * [] and [1, 2] → distance of 2
+#         * [1, 2] and [] → distance of 2
+#         * [5, 7] and [5, 6] → distance of 1
+#         * [1, 2, 3, 4] and [4, 5, 3] → distance of 3
+	
+	
+	* [6, 5] and [5, 6] → distance of 1
+	
+public class Main {
+	
+	int minSteps = 0;
+	public int getSteps(int[] arr1, int[] arr2) {
+		if (arr1.length == 0) {
+			return arr2.length;
+		}
+		
+		if (arr2.length == 0) {
+			return arr1.length;
+		}
+		
+		backtrack(arr1, arr2, 0, 0, 0);
+		return minSteps;
+	}
+	
+	
+	private void backtrack(List<Integer> source, List<Integer> target, int index1, int index2, int currSteps) {
+		if (equals(source, target)) {
+			minSteps = Math.min(minSteps, currSteps);
+			return;
+		}
+		
+		for (int i = index1; i < source.length; i++) {
+			if (source[i] == target[i] {
+				continue;
+			}
+			
+//			# * Inserting one evidence id anywhere in the case.
+			source.add(index1, target.gfet(index2); 
+			backtrack(source,	target, index1+1, index2, currStep+1);
+//# * Removing one evidence id from the case.
+			source.remove(index1);
+			backtrack(source, target, index1, index2+1, currStep + 1);		   
+//# * Replacing one evidence id in the case with a different value.
+			//TODO: replace source index1 with target index2's value
+			source.get(index1) = target.get(index2);
+			backtrack(source, target index1+1, index2+1, currStep + 1);		   
+		}
+	}
+	
+
+	public static void main(String[] args) {
+		System.out.println("Argument count: " + args.length);
+		for (int i = 0; i < args.length; i++) {
+			System.out.println("Argument " + i + ": " + args[i]);
+		}
+	}
+
+}
