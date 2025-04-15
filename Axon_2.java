@@ -24,7 +24,7 @@ import java.util.*;
 class Main {
     class Entry {
         int x, y, timestamp;
-        public Entry(int x, int y, int timestmap) {
+        public Entry(int x, int y, int timestamp) {
             this.x = x;
             this.y = y;
             this.timestamp = timestamp;
