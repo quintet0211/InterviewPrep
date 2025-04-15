@@ -30,4 +30,21 @@ public class BufferedFileWriter {
             buffer.setLength(0);
         }
     }
+    
+    public static void main(String[] args) {
+        try {
+            // Create BufferedFileWriter with buffer size of 5 characters
+            BufferedFileWriter writer = new BufferedFileWriter("output.txt", 5);
+
+            // Simulate writing chunks of text as byte arrays
+            writer.write("hello ".getBytes());           // "hello" triggers flush
+            writer.write("world! ".getBytes());          // "world" triggers flush, "!" stays
+            writer.write("this is a test".getBytes());   // flushes as needed
+            writer.flush();                              // flush any remaining characters
+
+            System.out.println("Write complete. Check output.txt.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
