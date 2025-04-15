@@ -88,16 +88,22 @@ class Solution {
 
     private static FSEntry findEntry(FSEntry current, List<String> parts) {
       for (String part : parts) {
+        if (current instanceof File) {
+            return null; //Did not find
+        }
         Directory currDir = (Directory)current;
+        Boolean found = false;  
         for (FSEntry entry : currDir.content) {
           if (entry.name.equals(part)) {
             current = entry;
+            found = true;  
           }
         }
 
-        if (current == null) {
-          throw new IllegalArgumentException("entry not exist");
+        if (!found) {
+            return null;
         }
+        
       }
 
       return current;
